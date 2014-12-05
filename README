@@ -1,0 +1,15 @@
+Compile:
+
+javac -cp src src/foo/Main.java
+
+Run Java version (expecting no error):
+
+java -cp src foo.Main
+
+Run Clojure version (expecting an error):
+
+java -cp clojure-1.6.0.jar:src clojure.main src/foo/m.clj
+
+Run patched Clojure version (expecting the same output as the Java version):
+
+java -cp clojure-1.6.0-patched.jar:src clojure.main src/foo/m.clj
