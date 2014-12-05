@@ -1,0 +1,27 @@
+From 2712aca48359c4a8925820f313987d1ba1fbdc91 Mon Sep 17 00:00:00 2001
+From: Jeremy Heiler <jeremyheiler@gmail.com>
+Date: Fri, 5 Dec 2014 01:16:59 -0500
+Subject: [PATCH] Fix an edge case in the Reflector's search for a public
+ method declaration
+
+The Reflector was not taking into account that a non-public class can implement an interface, and have a non-public parent class contain an implementation of a method on that interface.
+---
+ src/jvm/clojure/lang/Reflector.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/jvm/clojure/lang/Reflector.java b/src/jvm/clojure/lang/Reflector.java
+index 117a56b..dd534e6 100644
+--- a/src/jvm/clojure/lang/Reflector.java
++++ b/src/jvm/clojure/lang/Reflector.java
+@@ -83,7 +83,7 @@ static Object invokeMatchingMethod(String methodName, List methods, Object targe
+ 		{
+ 		//public method of non-public class, try to find it in hierarchy
+ 		Method oldm = m;
+-		m = getAsMethodOfPublicBase(m.getDeclaringClass(), m);
++		m = getAsMethodOfPublicBase(target.getClass(), m);
+ 		if(m == null)
+ 			throw new IllegalArgumentException("Can't call public method of non-public class: " +
+ 			                                    oldm.toString());
+-- 
+2.2.0
+
